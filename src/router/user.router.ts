@@ -1,22 +1,45 @@
-import {Router} from "express";
-import {userController} from "../controllers/user.controller";
-import {commonMiddleware} from "../middleware/common.middleware";
-import {UserValidator} from "../validators/user.validator";
-import {authMiddleware} from "../middleware/auth.middleware";
-import {fileMiddleware} from "../middleware/file.middleware";
-import {avatarConfig} from "../constants/image.constants";
+import { Router } from "express";
+
+import { avatarConfig } from "../constants/image.constants";
+import { userController } from "../controllers/user.controller";
+import { authMiddleware } from "../middleware/auth.middleware";
+import { commonMiddleware } from "../middleware/common.middleware";
+import { fileMiddleware } from "../middleware/file.middleware";
+import { UserValidator } from "../validators/user.validator";
 
 const router = Router();
 
-router.get("/",commonMiddleware.isQueryValid(UserValidator.isQuery), userController.getList)
+router.get(
+  "/",
+  commonMiddleware.isQueryValid(UserValidator.isQuery),
+  userController.getList,
+);
 
-router.get("/me", authMiddleware.checkAccessToken, userController.getMe)
-router.put("/me", authMiddleware.checkAccessToken, commonMiddleware.isBodyValid(UserValidator.update), userController.updateMe)
-router.delete("/me", authMiddleware.checkAccessToken, userController.deleteMe)
+router.get("/me", authMiddleware.checkAccessToken, userController.getMe);
+router.put(
+  "/me",
+  authMiddleware.checkAccessToken,
+  commonMiddleware.isBodyValid(UserValidator.update),
+  userController.updateMe,
+);
+router.delete("/me", authMiddleware.checkAccessToken, userController.deleteMe);
 
-router.post("/avatar", authMiddleware.checkAccessToken, fileMiddleware.isFileValid("avatar", avatarConfig), userController.uploadAvatar)
-router.delete("/deleteAvatar", authMiddleware.checkAccessToken, userController.deleteAvatar)
+router.post(
+  "/avatar",
+  authMiddleware.checkAccessToken,
+  fileMiddleware.isFileValid("avatar", avatarConfig),
+  userController.uploadAvatar,
+);
+router.delete(
+  "/deleteAvatar",
+  authMiddleware.checkAccessToken,
+  userController.deleteAvatar,
+);
 
-router.get("/:userId", commonMiddleware.isValid("userId"), userController.getById)
+router.get(
+  "/:userId",
+  commonMiddleware.isValid("userId"),
+  userController.getById,
+);
 
-export const userRouter = router
+export const userRouter = router;
